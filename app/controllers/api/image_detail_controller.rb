@@ -33,11 +33,16 @@ class Api::ImageDetailController < ApplicationController
 	# GET /search?tags='football'
 	def search
 		tag = params['tags']
-		pictures = Flickr.flickr.photos(tags: params['tags']) if params['tags'].present?
-		pictures ||= Flickr.flickr.recent
-		picture_urls = pictures.map {|p| p.url}
+		unless ImageDetail.images_with_tag_present?(tag)
+			pictures = Flickr.flickr.photos(tags: params['tags']) if params['tags'].present?
+			pictures ||= Flickr.flickr.recent
+			picture_urls = pictures.map {|p| p.url}
 
-		cache_searched_images(tag, picture_urls)
+			cache_searched_images(tag, picture_urls) 
+		else
+			pictures = ImageDetail.where(tag: tag).where('expires_at > ?', Time.now)
+			picture_urls = pictures.map {|p| p.url}
+		end
 
 		render json: picture_urls
 	end	

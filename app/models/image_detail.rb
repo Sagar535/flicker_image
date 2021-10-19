@@ -2,6 +2,18 @@ class ImageDetail < ApplicationRecord
 	before_create :set_expires_at
 	after_initialize :set_defaults
 
+	def self.images_with_tag_present?(tag)
+		ImageDetail.where(tag: tag).where('expires_at > ?', Time.now).present?
+	end
+
+	def valid?
+		expires_at > Time.now
+	end
+
+	def expired?
+		!valid?
+	end
+
 	private
 
 	def set_expires_at
