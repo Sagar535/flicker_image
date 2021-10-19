@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  tag: MyString
+  url: MyString
+  expires_at: 2021-10-18 21:19:20
+
+two:
+  tag: MyString
+  url: MyString
+  expires_at: 2021-10-18 21:19:20
